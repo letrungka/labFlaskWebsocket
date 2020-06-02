@@ -1,7 +1,7 @@
 ```
 # Topology
 
-Webrower(websocket client) >>> AWS CLB (80) >>> NGINX(80) >>> FLASK(5000)
+Webrower(websocket client) >>> AWS CLB (80 - enable proxy mode) >>> NGINX(80 - proxy_protocol to read header proxy  ) >>> FLASK(5000 - socket server)
 
 # create policy
 aws elb create-load-balancer-policy \
