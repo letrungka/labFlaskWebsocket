@@ -30,6 +30,6 @@ jobs:
     - run:
         name: Zip_files
         command: |  
-          copy -r lambdas/intent_processing/ria_intent_processing build/          
+          cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && zip -r {{ checksum "../requirements.txt" }}.zip ./*
           ls -ltr
