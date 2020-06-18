@@ -39,7 +39,7 @@ jobs:
           sudo cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && sudo zip -r $REQUIREMENT_MD5CHECKSUM.zip ./*
           cd .. && sudo mkdir -p workspace
-          sudo cp -r build workspace
+          sudo cp -r {build,requirements.txt} workspace
     - persist_to_workspace:
         root: workspace
         paths:
