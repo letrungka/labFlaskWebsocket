@@ -1,6 +1,8 @@
 description: |
   Building their projects with CircleCI.
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@x.y
 executors:
   docker_python37:
     description: |
@@ -36,22 +38,41 @@ jobs:
           ZIP_NAME=`md5sum requirements.txt | awk '{ print $1 }'`
           sudo cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && sudo zip -r $ZIP_NAME.zip ./*
-          ls -ltr
+          cd .. && sudo mkdir -p workspace
+          sudo cp -r build workspace
+    - persist_to_workspace:
+        root: workspace
+        paths:
+          - build
   deliver_to_S3:
     description: |  
       Build libs
     executor: docker_awscli
     steps:
-    - run:
+    - attach_workspace:
+        at: /tmp/workspace
+    - aws-s3/copy::
         name: push_zip_to_s3
-        command: |
-          echo "hello"
-          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
+        arguments: '--dry-run'
+        aws-access-key-id: ${s3_put_key}
+        aws-region: us-east-1
+        aws-secret-access-key: ${s3_put_secret}
+        from: /tmp/workspace/build/*.zip
+        to: s3://${bucket_name}
+#          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
 workflows:
   version: 2
   build-delivertoS3:
     jobs:
-      - build
+      - build:
+          filters:  # using regex filters requires the entire branch to match
+            branches:
+              only:  # only branches matching the below regex filters will run
+                - circleci-project-setup
       - deliver_to_S3:
+          filters:  # using regex filters requires the entire branch to match
+            branches:
+              only:  # only branches matching the below regex filters will run
+                - circleci-project-setup
           requires:
             - build
