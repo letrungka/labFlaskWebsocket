@@ -19,7 +19,7 @@ jobs:
         key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
     - run:
         command: |
-          sudo mkdir build
+          sudo mkdir -p build || true
           sudo pip install -r requirements.txt -t build/
         name: Build_libs
     - save_cache:
