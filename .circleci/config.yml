@@ -31,8 +31,8 @@ jobs:
         name: Zip_files
         command: |       
           ZIP_NAME=`md5sum requirements.txt | awk '{ print $1 }'`
-          cp -r lambdas/intent_processing/ria_intent_processing build/          
-          cd build/ && zip -r $ZIP_NAME.zip ./*
+          sudo cp -r lambdas/intent_processing/ria_intent_processing build/          
+          cd build/ && sudo zip -r $ZIP_NAME.zip ./*
           ls -ltr
   Deliver_to_S3:
     description: |
