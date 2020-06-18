@@ -46,6 +46,7 @@ jobs:
         name: push_zip_to_s3
         command: |
           echo "hello"
+          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
 workflows:
   version: 2
   build-delivertoS3:
