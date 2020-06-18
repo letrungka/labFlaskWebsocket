@@ -54,9 +54,9 @@ jobs:
     - aws-s3/copy:
         name: push_zip_to_s3
         arguments: '--dry-run'
-        aws-access-key-id: ${s3_put_key}
-        aws-region: us-east-1
-        aws-secret-access-key: ${s3_put_secret}
+        aws-access-key-id: s3_put_key
+        aws-region: s3_region
+        aws-secret-access-key: s3_put_secret
         from: /tmp/workspace/build/*.zip
         to: s3://${bucket_name}
 #          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
