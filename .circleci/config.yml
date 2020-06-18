@@ -18,10 +18,11 @@ jobs:
     - restore_cache:
         key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
     - run:
+        name: Build_libs
         command: |
           sudo mkdir -p build || true
           sudo pip install -r requirements.txt -t build/
-        name: Build_libs
+          ls -ltr build/
     - save_cache:
         key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
         paths:
@@ -31,7 +32,7 @@ jobs:
         command: |
           ZIP_NAME={{ checksum "requirements.txt" }} 
           cp -r lambdas/intent_processing/ria_intent_processing build/          
-          cd build/ && zip -r {{ $zip_name }}.zip ./*
+          cd build/ && zip -r $ZIP_NAME.zip ./*
           ls -ltr
   Deliver_to_S3:
     description: |
