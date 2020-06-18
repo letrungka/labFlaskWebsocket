@@ -56,14 +56,15 @@ jobs:
         name: set env REQUIREMENT_MD5CHECKSUM
         command: |
           export REQUIREMENT_MD5CHECKSUM=$(md5sum /tmp/workspace/requirements.txt | awk '{ print $1 }')
+          echo $REQUIREMENT_MD5CHECKSUM
     - aws-s3/copy:
         aws-access-key-id: s3_put_key
         aws-region: s3_region
         aws-secret-access-key: s3_put_secret
-        from: /tmp/workspace/build/$REQUIREMENT_MD5CHECKSUM.zip
+        from: /tmp/workspace/build/${REQUIREMENT_MD5CHECKSUM}.zip
         to: s3://${bucket_name}
 
-workflows:
+workflows: 
   version: 2
   build-delivertoS3:
     jobs:
