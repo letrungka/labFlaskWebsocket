@@ -2,16 +2,19 @@ description: |
   Building their projects with CircleCI.
 version: 2.1
 executors:
-  default:
+  docker_python37:
     description: |
       Custom Docker image with docker pyton3.7 to build library
     docker:
     - image: circleci/python:3.7.2
+  docker_awscli:
+    docker:
+      - image: alpine:latest
 jobs:
   build:
     description: |
       Build libs
-    executor: default
+    executor: docker_python37
     steps:
     - checkout
     - run: sudo chown -R circleci:circleci /usr/local/bin
@@ -34,12 +37,20 @@ jobs:
           sudo cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && sudo zip -r $ZIP_NAME.zip ./*
           ls -ltr
-  Deliver_to_S3:
-    description: |
+  deliver_to_S3:
+    description: |  
       Build libs
-    executor: default
+    executor: docker_awscli
     steps:
     - run:
         name: push_zip_to_s3
         command: |
           echo "hello"
+workflows:
+  version: 2
+  build-delivertoS3:
+    jobs:
+      - build
+      - deliver_to_S3:
+          requires:
+            - build
