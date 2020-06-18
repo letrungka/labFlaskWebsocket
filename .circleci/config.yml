@@ -16,7 +16,7 @@ jobs:
     - checkout
     - run: sudo chown -R circleci:circleci /usr/local/bin
     - restore_cache:
-        key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
+        key: deps10-{{ .Branch }}-{{ md5sum "requirements.txt" }}
     - run:
         name: Build_libs
         command: |
@@ -24,13 +24,14 @@ jobs:
           sudo pip install -r requirements.txt -t build/
           ls -ltr build/
     - save_cache:
-        key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
+        key: deps10-{{ .Branch }}-{{ md5sum "requirements.txt" }}
         paths:
           - '/usr/local/bin'
     - run:
         name: Zip_files
         command: |
-          ZIP_NAME={{ checksum "requirements.txt" }} 
+        
+          ZIP_NAME={{ md5sum "requirements.txt" }}.zip 
           cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && zip -r $ZIP_NAME.zip ./*
           ls -ltr
