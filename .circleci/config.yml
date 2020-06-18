@@ -35,9 +35,9 @@ jobs:
     - run:
         name: Zip_files
         command: |       
-          ZIP_NAME=`md5sum requirements.txt | awk '{ print $1 }'`
+          REQUIREMENT_MD5CHECKSUM=`md5sum requirements.txt | awk '{ print $1 }'`
           sudo cp -r lambdas/intent_processing/ria_intent_processing build/          
-          cd build/ && sudo zip -r $ZIP_NAME.zip ./*
+          cd build/ && sudo zip -r $REQUIREMENT_MD5CHECKSUM.zip ./*
           cd .. && sudo mkdir -p workspace
           sudo cp -r build workspace
     - persist_to_workspace:
@@ -49,21 +49,19 @@ jobs:
       Build libs
     executor: docker_awscli
     steps:
-    - run:
-        name: print variable
-        command: |
-          echo $s3_put_key
-          echo $s3_region
-          echo $s3_put_secret
     - attach_workspace:
         at: /tmp/workspace
+    - run:
+        name: set env REQUIREMENT_MD5CHECKSUM
+        command: |
+          export REQUIREMENT_MD5CHECKSUM=$(md5sum requirements.txt | awk '{ print $1 }')
     - aws-s3/copy:
         aws-access-key-id: s3_put_key
         aws-region: s3_region
         aws-secret-access-key: s3_put_secret
-        from: /tmp/workspace/build/*.zip
+        from: /tmp/workspace/build/$REQUIREMENT_MD5CHECKSUM.zip
         to: s3://${bucket_name}
-#          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
+
 workflows:
   version: 2
   build-delivertoS3:
@@ -80,3 +78,4 @@ workflows:
                 - circleci-project-setup
           requires:
             - build
+          context: ForAllProjects  
