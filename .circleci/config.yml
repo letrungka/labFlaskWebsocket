@@ -57,6 +57,7 @@ jobs:
     - attach_workspace:
         at: /tmp/workspace
     - aws-s3/copy:
+        arguments: '--dryrun'
         aws-access-key-id: s3_put_key
         aws-region: s3_region
         aws-secret-access-key: s3_put_secret
