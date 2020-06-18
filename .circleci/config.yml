@@ -57,7 +57,7 @@ jobs:
         aws-region: s3_region
         aws-secret-access-key: s3_put_secret
         from: /tmp/workspace/build/*.zip
-        to: s3://$bucket_name
+        to: s3://trung-dev-rad-ria-service
 #          echo "s3 key: " ${s3_put_key} ${s3_put_secret}
 workflows:
   version: 2
