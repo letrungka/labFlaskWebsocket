@@ -25,7 +25,6 @@ jobs:
     - save_cache:
         key: deps10-{{ .Branch }}-{{ checksum "requirements.txt" }}
         paths:
-          - 'build'
           - '/usr/local/bin'
     - run:
         name: Zip_files
