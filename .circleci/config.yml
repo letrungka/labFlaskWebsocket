@@ -49,6 +49,12 @@ jobs:
       Build libs
     executor: docker_awscli
     steps:
+    - run:
+        name: print variable
+        command: |
+          echo $s3_put_key
+          echo $s3_region
+          echo $s3_put_secret
     - attach_workspace:
         at: /tmp/workspace
     - aws-s3/copy:
