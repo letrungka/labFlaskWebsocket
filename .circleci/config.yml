@@ -54,7 +54,7 @@ jobs:
     - run:
         name: set env REQUIREMENT_MD5CHECKSUM
         command: |
-          export REQUIREMENT_MD5CHECKSUM=$(md5sum requirements.txt | awk '{ print $1 }')
+          export REQUIREMENT_MD5CHECKSUM=$(md5sum /tmp/workspace/requirements.txt | awk '{ print $1 }')
     - aws-s3/copy:
         aws-access-key-id: s3_put_key
         aws-region: s3_region
