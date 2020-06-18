@@ -51,7 +51,7 @@ jobs:
     steps:
     - attach_workspace:
         at: /tmp/workspace
-    - aws-s3/copy::
+    - aws-s3/copy:
         name: push_zip_to_s3
         arguments: '--dry-run'
         aws-access-key-id: ${s3_put_key}
