@@ -29,7 +29,7 @@ jobs:
     - run:
         name: Zip_files
         command: |
-          zip_name = checksum "requirements.txt"  
+          ZIP_NAME={{ checksum "requirements.txt" }} 
           cp -r lambdas/intent_processing/ria_intent_processing build/          
           cd build/ && zip -r {{ $zip_name }}.zip ./*
           ls -ltr
