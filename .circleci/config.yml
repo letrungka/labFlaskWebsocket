@@ -28,7 +28,17 @@ jobs:
           - '/usr/local/bin'
     - run:
         name: Zip_files
-        command: |  
+        command: |
+          zip_name = checksum "requirements.txt"  
           cp -r lambdas/intent_processing/ria_intent_processing build/          
-          cd build/ && zip -r {{ checksum "../requirements.txt" }}.zip ./*
+          cd build/ && zip -r {{ $zip_name }}.zip ./*
           ls -ltr
+  Deliver_to_S3:
+    description: |
+      Build libs
+    executor: default
+    steps:
+    - run:
+        name: push_zip_to_s3
+        command: |
+          echo "hello"
